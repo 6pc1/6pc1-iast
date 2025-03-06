@@ -36,7 +36,7 @@ public class SourceClassVisitorHandler implements Handler {
                         push(isStatic);
 
                         mv.visitMethodInsn(INVOKESTATIC, "cn/org/pc6pc1/iast/core/Source", "enterSource",
-                                "([Ljava/lang/Obejct;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V", false);
+                                "([Ljava/lang/Object;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V", false);
                         super.onMethodEnter();
                     } catch (Exception e){
                         throw new RuntimeException("source process error", e);
