@@ -28,9 +28,11 @@ public class Http {
 
     // 在HTTP方法结束前调用，主要是对存在于上下文的结果进行可视化的打印
     public static void leaveHttp() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        // 获取之前在进入方法中存储的request
         IASTServletRequest request = RequestContext.getHttpRequestContextThreadLocal().getServletRequest();
         // 将对应结果可视化打印
-        // 防止初始化时的各种信息打印
+        // 进行初始化时的各种信息打印，比如对应的url、参数、请求方法
+        // 这里有个条件判断，是防止默认页面也加载这些
         if (!request.getRequestURI().contains("favicon.ico") && !request.getRequestURI().contains("/")){
             System.out.printf("URL             : %s \n", request.getRequestURL().toString());
             System.out.printf("URI             : %s \n", request.getRequestURI());
@@ -179,6 +181,7 @@ public class Http {
         if (!haveEnterHttp()){
             IASTServletRequest request = new IASTServletRequest(objects[0]);
             IASTServletResponse response = new IASTServletResponse(objects[1]);
+
 
             RequestContext.setHttpRequestContextThreadLocal(request, response);
         }

@@ -16,17 +16,22 @@ public class HttpClassVisitorHandler implements Handler {
     @Override
     public MethodVisitor ClassVisitorHandler(MethodVisitor mv, String className, int access,
                                              String name, String desc, String signature, String[] exceptions) {
+        // 确保只对HttpServlet的service方法进行修改
         if ("service".equals(name) && METHOD_DESC.equals(desc)) {
             final boolean isStatic = Modifier.isStatic(access);
+            //获得Object[]的类型值， 一般也就是[Ljava/lang/Object;
             final Type argsType = Type.getType(Object[].class);
 
+            // 打印基础信息
             System.out.println(
                     "HTTP Process 类名是: " + className + ",方法名是: " + name + "方法的描述符是:" + desc + ",签名是:"
                             + signature + ",exceptions:" + exceptions);
             try {
+                // 使用AdviceAdapter更加简易的在方法入口点以及出库点进行操作
                 return new AdviceAdapter(Opcodes.ASM5, mv, access, name, desc) {
                     @Override
                     protected void onMethodEnter() {
+                        //加载对应参数
                         loadArgArray();
                         int argsIndex = newLocal(argsType);
                         storeLocal(argsIndex, argsType);
@@ -40,6 +45,9 @@ public class HttpClassVisitorHandler implements Handler {
 
                         loadLocal(argsIndex);
 
+                        // 在调用 visitMethodInsn 之前，必须将所有参数压入操作数栈。
+                        // 参数的顺序必须与方法描述符中指定的顺序一致。 如果方法是一个实例方法，则必须首先将 this 指针压入操作数栈。
+                        // 这里两个参数是HttpServletRequest和HttpServletResponse
                         mv.visitMethodInsn(INVOKESTATIC, "cn/org/pc6pc1/iast/core/Http", "enterHttp",
                                 "([Ljava/lang/Object;)V", false);
 
