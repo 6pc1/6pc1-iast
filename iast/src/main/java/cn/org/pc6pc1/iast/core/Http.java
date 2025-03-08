@@ -17,12 +17,14 @@ public class Http {
      * 在HTTP方法结束前调用，主要是对存在当前上下文的结果进行可视化打印输出
      */
     public static void leaveHttp() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
-        IASTServletRequest request = RequestContext.getHttpRequestContextThreadLocal()
-                .getServletRequest();
-        System.out.printf("URL            : %s \n", request.getRequestURL().toString());
-        System.out.printf("URI            : %s \n", request.getRequestURI());
-        System.out.printf("QueryString    : %s \n", request.getQueryString());
-        System.out.printf("HTTP Method    : %s \n", request.getMethod());
+        IASTServletRequest request = RequestContext.getHttpRequestContextThreadLocal().getServletRequest();
+        if(!request.getRequestURI().equals("/test_war_exploded/"))
+        {
+            System.out.printf("URL            : %s \n", request.getRequestURL().toString());
+            System.out.printf("URI            : %s \n", request.getRequestURI());
+            System.out.printf("QueryString    : %s \n", request.getQueryString());
+            System.out.printf("HTTP Method    : %s \n", request.getMethod());
+        }
         RequestContext.getHttpRequestContextThreadLocal().getCallChain().forEach(item -> {
             if (item.getChainType().contains("leave")) {
                 String returnData = null;
