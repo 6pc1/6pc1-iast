@@ -30,6 +30,9 @@ public class AgentTransform implements ClassFileTransformer {
         ClassWriter classWriter  = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS);
         ClassVisitor classVisitor = new IASTClassVisitor(className, classWriter);
 
+
+        // 将 ClassReader 接收 IASTClassVisitor 的访问。 ClassReader.EXPAND_FRAMES 参数告诉 ASM 展开栈图。
+        // accept 方法会遍历类的所有结构，并调用 IASTClassVisitor 中相应的方法进行处理。
         classReader.accept(classVisitor, ClassReader.EXPAND_FRAMES);
 
         classfileBuffer = classWriter.toByteArray();
@@ -39,7 +42,7 @@ public class AgentTransform implements ClassFileTransformer {
         String regexp = "(Decoder|Servlet|connector|Request|Parameters|Base64|Runtime|ProcessBuilder)";
 
         if (Pattern.compile(regexp).matcher(className).find()) {
-            ClassUtils.dumpClassFile("E:\\AST\\IAST\\6pc1-iast\\iast\\src\\main\\resources\\test", className, classfileBuffer, originalClassfileBuffer);
+            ClassUtils.dumpClassFile("E:\\AST\\IAST\\6pc1-iast\\iast\\src\\main\\resources\\test\\test", className, classfileBuffer, originalClassfileBuffer);
         }
 
         return classfileBuffer;

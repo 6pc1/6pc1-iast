@@ -2,7 +2,7 @@
 
 本项目主要是实现了一个简易的Active IAST的demo。
 
-iast文件夹是主要的插桩程序，用来对程序进行主动插桩和流量重放 test是运行的测试环境，里面写了一个测试命令执行的页面
+iast文件夹是主要的插桩程序，用来对程序进行主动插桩 test是运行的测试环境，里面写了一个测试命令执行的页面
 
 ## 配置与运行
 
@@ -16,10 +16,10 @@ iast文件夹是主要的插桩程序，用来对程序进行主动插桩和流�
 - 访问
 
 ```
-http://localhost:8080/cmd.jsp?cmd=ls
+http://localhost:8080/cmd.jsp?cmd=whoami
 ```
 
-项目会保存调用栈与调用信息到`iast\src\main\resources`目录，并通过流量重放进行验证
+项目会保存调用栈与调用信息到`iast\src\main\resources`目录中
 
 - 如果想查看被插桩的类的效果的话，修改`AgentTransform`里面的路径
 
