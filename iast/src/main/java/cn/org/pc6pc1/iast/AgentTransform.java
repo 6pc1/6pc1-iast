@@ -32,7 +32,7 @@ public class AgentTransform implements ClassFileTransformer {
 
 
         // 将 ClassReader 接收 IASTClassVisitor 的访问。 ClassReader.EXPAND_FRAMES 参数告诉 ASM 展开栈图。
-        // accept 方法会遍历类的所有结构，并调用 IASTClassVisitor 中相应的方法进行处理。
+        // accept 方法会遍历类的所有结构，并调用 IASTClassVisitor 中相应的方法进行处理。这里也就是调用visitMethod方法
         classReader.accept(classVisitor, ClassReader.EXPAND_FRAMES);
 
         classfileBuffer = classWriter.toByteArray();

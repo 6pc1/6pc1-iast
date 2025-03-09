@@ -6,6 +6,8 @@ import cn.org.pc6pc1.iast.contenxt.RequestContext;
 import cn.org.pc6pc1.iast.http.IASTServletRequest;
 import cn.org.pc6pc1.iast.http.IASTServletResponse;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
@@ -48,17 +50,32 @@ public class Http {
 
             // 如果是Sink类型，则还会输出调用栈信息
             if (item.getChainType().contains("Sink")) {
-                int                 depth    = 1;
-                StackTraceElement[] elements = item.getStackTraceElement();
+                FileWriter writer = null;
+                try {
+                    writer = new FileWriter("D:\\Code_Project\\Java\\DecemIAST\\iast\\src\\main\\java\\cn\\org\\enjoy\\result\\callstack.txt", true); // true表示追加到文件末尾
+                    int depth = 1;
+                    StackTraceElement[] elements = item.getStackTraceElement();
 
-                for (StackTraceElement element : elements) {
-                    if (element.getClassName().contains("cn.org.javaweb.iast") ||
-                            element.getClassName().contains("java.lang.Thread")) {
-                        continue;
+                    for (StackTraceElement element : elements) {
+                        if (element.getClassName().contains("cn.org.pc6pc1.iast") ||
+                                element.getClassName().contains("java.lang.Thread")) {
+                            continue;
+                        }
+                        String stackTraceLine = String.format("%" + depth + "s", "") + element.toString() + "\n";
+                        writer.write(stackTraceLine);
+                        System.out.print(stackTraceLine);
+                        depth++;
                     }
-                    System.out.printf("%9s".replace("9", String.valueOf(depth)), "");
-                    System.out.println(element);
-                    depth++;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (writer != null) {
+                        try {
+                            writer.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
         });
@@ -88,6 +105,13 @@ public class Http {
             RequestContext.setHttpRequestContextThreadLocal(request, response);
         }
     }
+
+
+
+    public static void replayHttp(IASTServletRequest request){
+
+    }
+
 
 
 }

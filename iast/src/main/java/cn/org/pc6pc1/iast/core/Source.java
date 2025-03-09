@@ -28,6 +28,7 @@ public class Source {
             callChain.setJavaMethodName(javaMethodName);
             callChain.setJavaMethodDesc(javaMethodDesc);
             callChain.setStatic(isStatic);
+            // 加入调用链
             RequestContext.getHttpRequestContextThreadLocal().addCallChain(callChain);
         }
     }
@@ -52,6 +53,7 @@ public class Source {
             callChain.setJavaMethodName(javaMethodName);
             callChain.setJavaMethodDesc(javaMethodDesc);
             callChain.setStatic(isStatic);
+            // 加入调用链中
             RequestContext.getHttpRequestContextThreadLocal().addCallChain(callChain);
         }
     }
